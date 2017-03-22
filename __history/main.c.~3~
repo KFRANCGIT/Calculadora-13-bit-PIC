@@ -1,0 +1,19 @@
+#include <18f4620.h>
+#use delay(clock=32M)
+#fuses INTRC_IO, NOFCMEN, NOIESO, PUT, NOBROWNOUT, NOWDT
+#fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG
+
+void main(void){
+
+   unsigned int8 varEstados = 128;
+   set_tris_b(0x00);
+   setup_oscillator(OSC_32MHZ);   
+  
+   while(true){
+      if(bit_test(varEstados,0)==1){
+         output_high(pin_b0);
+      }
+      else
+         output_high(pin_b3);
+   }
+}

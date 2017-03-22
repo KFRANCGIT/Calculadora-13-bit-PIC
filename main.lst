@@ -1,0 +1,147 @@
+CCS PCH C Compiler, Version 5.012, 41559               21-mar.-17 19:56
+
+               Filename:   D:\OneDrive\INGENIERIA TELEMATICA\4° Semestre\Sistemas Embebidos\PRACTICAS PROGRAMACION\PRACTICA 2\Calculadora-13-bit-PIC\main.lst
+
+               ROM used:   116 bytes (0%)
+                           Largest free fragment is 65420
+               RAM used:   5 (0%) at main() level
+                           6 (0%) worst case
+               Stack used: 1 locations
+               Stack size: 31
+
+*
+00000:  GOTO   0048
+.................... #include <18f4620.h> 
+.................... ///////////// Standard Header file for the PIC18F4620 device //////////////// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... ////        (C) Copyright 1996, 2013 Custom Computer Services          //// 
+.................... //// This source code may only be used by licensed users of the CCS C  //// 
+.................... //// compiler.  This source code may only be distributed to other      //// 
+.................... //// licensed users of the CCS C compiler.  No other use, reproduction //// 
+.................... //// or distribution is permitted without written permission.          //// 
+.................... //// Derivative programs created using this software in object code    //// 
+.................... //// form are not restricted in any way.                               //// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... #device PIC18F4620 
+....................  
+.................... #list 
+....................  
+.................... #use delay(clock=32M) 
+.................... #fuses INTRC_IO, NOFCMEN, NOIESO, PUT, NOBROWNOUT, NOWDT 
+.................... #fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG 
+....................  
+....................  
+....................  
+.................... void puertoDef8Bits(unsigned int8); 
+....................  
+.................... void main(void){ 
+*
+00048:  CLRF   FF8
+0004A:  BCF    FD0.7
+0004C:  MOVF   FC1,W
+0004E:  ANDLW  C0
+00050:  IORLW  0F
+00052:  MOVWF  FC1
+00054:  MOVLW  07
+00056:  MOVWF  FB4
+00058:  MOVLW  FE
+0005A:  MOVWF  05
+....................  
+....................    unsigned int8 varEstados = 254; 
+....................    set_tris_b(0x00); 
+0005C:  MOVLW  00
+0005E:  MOVWF  F93
+....................    setup_oscillator(OSC_32MHZ);    
+00060:  MOVLW  70
+00062:  MOVWF  FD3
+00064:  MOVLW  40
+00066:  MOVWF  F9B
+00068:  MOVF   FD3,W
+....................    
+....................    while(true){ 
+....................       puertoDef8Bits(varEstados); 
+0006A:  MOVFF  05,06
+0006E:  BRA    0004
+00070:  BRA    006A
+....................    } 
+....................        
+.................... } 
+....................  
+00072:  SLEEP 
+.................... void puertoDef8Bits(unsigned int8 result){ 
+....................     
+....................    // A0 A1 A2 A3 A5 E0 E1 E2 //// B2 B3 B1 B4 B0 
+....................    // Encendido de cada puerto suponiendo que A0 es el mas significativo 
+....................    if(bit_test(result,0)){ 
+*
+00004:  BTFSS  06.0
+00006:  BRA    000C
+....................       output_high(pin_e2); 
+00008:  BCF    F96.2
+0000A:  BSF    F8D.2
+....................    } 
+....................    if(bit_test(result,1)){ 
+0000C:  BTFSS  06.1
+0000E:  BRA    0014
+....................       output_high(pin_e1); 
+00010:  BCF    F96.1
+00012:  BSF    F8D.1
+....................    } 
+....................    if(bit_test(result,2)){ 
+00014:  BTFSS  06.2
+00016:  BRA    001C
+....................       output_high(pin_e0); 
+00018:  BCF    F96.0
+0001A:  BSF    F8D.0
+....................    } 
+....................    if(bit_test(result,3)){ 
+0001C:  BTFSS  06.3
+0001E:  BRA    0024
+....................       output_high(pin_a5); 
+00020:  BCF    F92.5
+00022:  BSF    F89.5
+....................    } 
+....................    if(bit_test(result,4)){ 
+00024:  BTFSS  06.4
+00026:  BRA    002C
+....................       output_high(pin_a3); 
+00028:  BCF    F92.3
+0002A:  BSF    F89.3
+....................    } 
+....................    if(bit_test(result,5)){ 
+0002C:  BTFSS  06.5
+0002E:  BRA    0034
+....................       output_high(pin_a2); 
+00030:  BCF    F92.2
+00032:  BSF    F89.2
+....................    } 
+....................    if(bit_test(result,6)){ 
+00034:  BTFSS  06.6
+00036:  BRA    003C
+....................       output_high(pin_a1); 
+00038:  BCF    F92.1
+0003A:  BSF    F89.1
+....................    } 
+....................    if(bit_test(result,7)){ 
+0003C:  BTFSS  06.7
+0003E:  BRA    0044
+....................       output_high(pin_a0); 
+00040:  BCF    F92.0
+00042:  BSF    F89.0
+....................    } 
+00044:  GOTO   0070 (RETURN)
+....................    
+....................       // A0 A1 A2 A3 A5 E0 E1 E2 B2 B3 B1 B4 B0 
+....................        
+....................        
+....................     
+.................... } 
+
+Configuration Fuses:
+   Word  1: 0800   INTRC_IO NOFCMEN NOIESO
+   Word  2: 1E18   PUT NOBROWNOUT BORV21 NOWDT WDT32768
+   Word  3: 0500   CCP2C1 NOPBADEN LPT1OSC NOMCLR
+   Word  4: 0081   STVREN NOLVP NOXINST NODEBUG
+   Word  5: C00F   NOPROTECT NOCPB NOCPD
+   Word  6: E00F   NOWRT NOWRTC NOWRTB NOWRTD
+   Word  7: 400F   NOEBTR NOEBTRB
