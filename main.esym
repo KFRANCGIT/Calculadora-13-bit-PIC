@@ -1,8 +1,8 @@
-C L "puertoDef8Bits" 0 25 1 "FUNCTION"
-D G "__PCH__" 0 57 ""5.012""
-D G "__DEVICE__" 0 57 "4620"
-D G "__DATE__" 0 57 ""21-mar.-17""
-D G "__TIME__" 0 57 ""19:56:10"" "Standard Header file for the PIC18F4620 device ////////////////"
+d G "INT_OSCF" 1 831 "0x00A080"
+D G "__PCH__" 0 213 ""5.012""
+D G "__DEVICE__" 0 213 "4620"
+D G "__DATE__" 0 213 ""29-mar.-17""
+D G "__TIME__" 0 213 ""14:03:56"" "Standard Header file for the PIC18F4620 device ////////////////"
 c L "set_tris_a" 1 3 6 "FUNCTION"
 v L "value" 1 43 "int8" `54 
 f B "set_tris_a" 1 43 "void(int8 value)" `53 
@@ -909,13 +909,33 @@ d G "INT_LOWVOLT" 1 828 "0x00A004"
 d G "INT_COMP" 1 829 "0x00A040"
 d G "INT_EEPROM" 1 830 "0x00A010"
 d G "INT_OSCF" 1 831 "0x00A080"
-V L "??65535" 0 8 "int8" `639 
-f G "puertoDef8Bits" 0 8 "void(int8 )" `638 
-F G "main" 0 10 "void()" `640 
-V L "varEstados" 0 12 "int8" `641 
-V L "result" 0 22 "int8" `645 
-F G "puertoDef8Bits" 0 22 "void(int8 result)" `638  "A0 A1 A2 A3 A5 E0 E1 E2 //// B2 B3 B1 B4 B0"
-C L "puertoDef8Bits" 0 25 1 "FUNCTION"
+C L "jump_to_irs" 0 6 16 "FUNCTION"
+V L "res" 0 25 "int16" `639 
+f G "outputResultado13b" 0 25 "void(int16 res)" `638 
+f G "cambioEstadoPuertoA" 0 26 "void()" `640 
+f G "cambioEstadoPuertoB" 0 27 "void()" `641 
+f G "cambioEstadoPuertoE" 0 28 "void()" `642  "#INT_RB"
+C L "cambioEstadoPuertoE" 0 6 28 "FUNCTION"
+F G "main" 0 62 "void()" `643 
+V L "numeroUno" 0 67 "int8" `646 
+C L "main" 0 6 1 "FUNCTION"
+V L "numeroDos" 0 68 "int8" `647 
+V L "resultado" 0 69 "int16" `648 
+V L "banderasOperaciones" 0 70 "int8" `649 
+V L "contador" 0 79 "int8" `656 
+C L "main" 0 6 4 "FUNCTION"
+C L "main" 0 6 1 "FUNCTION"
+C L "main" 0 6 5 "FUNCTION"
+C L "main" 0 6 1 "FUNCTION"
+C L "main" 0 6 4 "FUNCTION"
+C L "main" 0 6 1 "FUNCTION"
+C L "main" 0 6 3 "FUNCTION"
+C L "main" 0 6 1 "FUNCTION"
+V L "res" 0 188 "int16" `664 
+F G "outputResultado13b" 0 188 "void(int16 res)" `638 
+F G "cambioEstadoPuertoA" 0 193 "void()" `640 
+F G "cambioEstadoPuertoB" 0 201 "void()" `641 
+F G "cambioEstadoPuertoE" 0 207 "void()" `642 
 F B "reset_cpu" 0 0
 F B "abs" 1 0
 F B "sleep" 0 1

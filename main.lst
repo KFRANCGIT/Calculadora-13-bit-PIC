@@ -1,16 +1,16 @@
-CCS PCH C Compiler, Version 5.012, 41559               21-mar.-17 19:56
+CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 14:03
 
                Filename:   D:\OneDrive\INGENIERIA TELEMATICA\4° Semestre\Sistemas Embebidos\PRACTICAS PROGRAMACION\PRACTICA 2\Calculadora-13-bit-PIC\main.lst
 
-               ROM used:   116 bytes (0%)
-                           Largest free fragment is 65420
-               RAM used:   5 (0%) at main() level
-                           6 (0%) worst case
+               ROM used:   604 bytes (1%)
+                           Largest free fragment is 64932
+               RAM used:   8 (0%) at main() level
+                           19 (0%) worst case
                Stack used: 1 locations
                Stack size: 31
 
 *
-00000:  GOTO   0048
+00000:  GOTO   00D6
 .................... #include <18f4620.h> 
 .................... ///////////// Standard Header file for the PIC18F4620 device //////////////// 
 .................... /////////////////////////////////////////////////////////////////////////// 
@@ -23,122 +23,486 @@ CCS PCH C Compiler, Version 5.012, 41559               21-mar.-17 19:56
 .................... //// form are not restricted in any way.                               //// 
 .................... /////////////////////////////////////////////////////////////////////////// 
 .................... #device PIC18F4620 
+*
+00048:  MOVF   0F,W
+0004A:  MULWF  11
+0004C:  MOVFF  FF3,01
+00050:  MOVFF  FF4,00
+00054:  MULWF  12
+00056:  MOVF   FF3,W
+00058:  ADDWF  00,F
+0005A:  MOVF   10,W
+0005C:  MULWF  11
+0005E:  MOVF   FF3,W
+00060:  ADDWFC 00,W
+00062:  MOVWF  02
+00064:  GOTO   01CC (RETURN)
+00068:  CLRF   01
+0006A:  CLRF   02
+0006C:  CLRF   00
+0006E:  CLRF   03
+00070:  MOVF   12,W
+00072:  BNZ   0078
+00074:  MOVF   11,W
+00076:  BZ    00A8
+00078:  MOVLW  10
+0007A:  MOVWF  13
+0007C:  BCF    FD8.0
+0007E:  RLCF   0F,F
+00080:  RLCF   10,F
+00082:  RLCF   00,F
+00084:  RLCF   03,F
+00086:  MOVF   12,W
+00088:  SUBWF  03,W
+0008A:  BNZ   0090
+0008C:  MOVF   11,W
+0008E:  SUBWF  00,W
+00090:  BNC   00A0
+00092:  MOVF   11,W
+00094:  SUBWF  00,F
+00096:  BTFSS  FD8.0
+00098:  DECF   03,F
+0009A:  MOVF   12,W
+0009C:  SUBWF  03,F
+0009E:  BSF    FD8.0
+000A0:  RLCF   01,F
+000A2:  RLCF   02,F
+000A4:  DECFSZ 13,F
+000A6:  BRA    007C
+000A8:  GOTO   020A (RETURN)
 ....................  
 .................... #list 
 ....................  
-.................... #use delay(clock=32M) 
-.................... #fuses INTRC_IO, NOFCMEN, NOIESO, PUT, NOBROWNOUT, NOWDT 
+.................... #use delay(clock=16M) 
+000AC:  CLRF   FEA
+000AE:  MOVLW  0B
+000B0:  MOVWF  FE9
+000B2:  MOVF   FEF,W
+000B4:  BZ    00D2
+000B6:  MOVLW  05
+000B8:  MOVWF  01
+000BA:  CLRF   00
+000BC:  DECFSZ 00,F
+000BE:  BRA    00BC
+000C0:  DECFSZ 01,F
+000C2:  BRA    00BA
+000C4:  MOVLW  2E
+000C6:  MOVWF  00
+000C8:  DECFSZ 00,F
+000CA:  BRA    00C8
+000CC:  BRA    00CE
+000CE:  DECFSZ FEF,F
+000D0:  BRA    00B6
+000D2:  GOTO   0226 (RETURN)
+.................... #fuses XT, NOFCMEN, NOIESO, PUT, NOBROWNOUT, NOWDT 
 .................... #fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG 
 ....................  
+.................... /*#INT_RB 
+.................... void RB_isr(void){ //función de interrupción 
+....................    if(input(PIN_B4)){ 
+....................       outputResultado13b(input_c() + input_d()); 
+....................    } else 
+....................    if(input(PIN_B5)){ 
+....................       outputResultado13b(input_c() - input_d()); 
+....................    } else 
+....................    if(input(PIN_B6)){ 
+....................       outputResultado13b(input_c() * input_d()); 
+....................    } else 
+....................    if(input(PIN_B7)){ 
+....................       if(input_d() != 0){ 
+....................          outputResultado13b(input_c() / input_d()); 
+....................       }          
+....................     } 
+.................... }*/ 
+.................... //int16 resultado = 1; 
 ....................  
+.................... void outputResultado13b(int16 res); 
+.................... void cambioEstadoPuertoA(); 
+.................... void cambioEstadoPuertoB(); 
+.................... void cambioEstadoPuertoE(); 
 ....................  
-.................... void puertoDef8Bits(unsigned int8); 
+.................... /*#INT_RB 
+.................... void RB_isr(void){ //función de interrupción 
+.................... //int16 resultado; 
+....................    if(input(PIN_B4)){ 
+....................       resultado = input_c() + input_d(); 
+....................       outputResultado13b(resultado); 
+....................       disable_interrupts(GLOBAL);   
+....................       enable_interrupts(GLOBAL); 
+....................       //INTCONbits.RBIF=0; 
+....................    } else 
+....................    if(input(PIN_B5)){ 
+....................       resultado = input_c() - input_d(); 
+....................       outputResultado13b(resultado); 
+....................       disable_interrupts(GLOBAL);  
+....................       enable_interrupts(GLOBAL); 
+....................    } else 
+....................    if(input(PIN_B6)){ 
+....................       resultado = input_c() * input_d();  
+....................       outputResultado13b(resultado); 
+....................       disable_interrupts(GLOBAL);  
+....................       enable_interrupts(GLOBAL); 
+....................    } else 
+....................    if(input(PIN_B7)){ 
+....................       if(input_d() != 0){ 
+....................          resultado = input_c() / input_d(); 
+....................          outputResultado13b(resultado); 
+....................          disable_interrupts(GLOBAL);   
+....................          enable_interrupts(GLOBAL); 
+....................       }          
+....................     } 
+.................... }*/ 
 ....................  
 .................... void main(void){ 
-*
-00048:  CLRF   FF8
-0004A:  BCF    FD0.7
-0004C:  MOVF   FC1,W
-0004E:  ANDLW  C0
-00050:  IORLW  0F
-00052:  MOVWF  FC1
-00054:  MOVLW  07
-00056:  MOVWF  FB4
-00058:  MOVLW  FE
-0005A:  MOVWF  05
-....................  
-....................    unsigned int8 varEstados = 254; 
-....................    set_tris_b(0x00); 
-0005C:  MOVLW  00
-0005E:  MOVWF  F93
-....................    setup_oscillator(OSC_32MHZ);    
-00060:  MOVLW  70
-00062:  MOVWF  FD3
-00064:  MOVLW  40
-00066:  MOVWF  F9B
-00068:  MOVF   FD3,W
-....................    
-....................    while(true){ 
-....................       puertoDef8Bits(varEstados); 
-0006A:  MOVFF  05,06
-0006E:  BRA    0004
-00070:  BRA    006A
-....................    } 
+000D6:  CLRF   FF8
+000D8:  BCF    FD0.7
+000DA:  MOVF   FC1,W
+000DC:  ANDLW  C0
+000DE:  IORLW  0F
+000E0:  MOVWF  FC1
+000E2:  MOVLW  07
+000E4:  MOVWF  FB4
 ....................        
+....................       setup_oscillator(OSC_normal); 
+000E6:  CLRF   FD3
+000E8:  MOVF   FD3,W
+....................       setup_adc(NO_ANALOGS); 
+000EA:  MOVF   FC0,W
+000EC:  ANDLW  C0
+000EE:  IORLW  0F
+000F0:  MOVWF  FC0
+000F2:  BCF    FC0.7
+000F4:  BSF    FC2.0
+....................        
+....................       unsigned int8 numeroUno = 0;    // Se puede reemplazar esto al leerlo directamente y operarlo     
+....................       unsigned int8 numeroDos = 0;   
+....................       int16 resultado = 0; 
+....................       int banderasOperaciones = 0; 
+....................      
+....................       #bit banderaError = banderasOperaciones.2; 
+000F6:  CLRF   05
+000F8:  CLRF   06
+000FA:  CLRF   08
+000FC:  CLRF   07
+000FE:  CLRF   09
+....................       #bit banderaContador = banderasOperaciones.3; 
+....................       #bit suma = banderasOperaciones.4; 
+....................       #bit resta = banderasOperaciones.5; 
+....................       #bit multiplicacion = banderasOperaciones.6; 
+....................       #bit division = banderasOperaciones.7; 
+....................        
+....................       int contador = 50; 
+00100:  MOVLW  32
+00102:  MOVWF  0A
+....................       /*int1 opSuma = 0; 
+....................       int1 opResta = 0; 
+....................       int1 opMultiplicacion = 0; 
+....................       int1 opDivision = 0;  */     
+....................        
+....................       SET_TRIS_A(0x00); 
+00104:  MOVLW  00
+00106:  MOVWF  F92
+....................       SET_TRIS_E(0x08); 
+00108:  BCF    F96.0
+0010A:  BCF    F96.1
+0010C:  BCF    F96.2
+0010E:  BSF    F96.3
+....................       SET_TRIS_B(0xF0); //SET_TRIS_B(0x78) 3 a 6 
+00110:  MOVLW  F0
+00112:  MOVWF  F93
+....................       SET_TRIS_C(0xFF); 
+00114:  MOVLW  FF
+00116:  MOVWF  F94
+....................       SET_TRIS_D(0xFF); 
+00118:  MOVWF  F95
+....................        
+....................        
+....................        
+....................       //port_a_pullups(TRUE); 
+....................       //EXT_INT_EDGE(H_TO_L); 
+....................       //EXT_INT_EDGE(L_TO_H); 
+....................       //enable_interrupts(INT_RB);//habilita interrupción particular 
+....................       //enable_interrupts(GLOBAL);//habilita interrupción global        
+....................  
+....................        
+....................        
+....................       while(true){ 
+....................          banderaError = 0;  //Inicializacion bandera error 
+0011A:  BCF    09.2
+....................          numeroUno = input_c(); 
+0011C:  SETF   F94
+0011E:  MOVFF  F82,05
+....................          numeroDos = input_d(); 
+00122:  SETF   F95
+00124:  MOVFF  F83,06
+....................           
+....................           
+....................          /*opSuma = input(PIN_B4); 
+....................          opResta = input(PIN_B5); 
+....................          opMultiplicacion = input(PIN_B6); 
+....................          opDivision = input(PIN_B7);*/ 
+....................           
+....................          if(input(PIN_B4)){ 
+00128:  BSF    F93.4
+0012A:  BTFSS  F81.4
+0012C:  BRA    0138
+....................             suma = 1; 
+0012E:  BSF    09.4
+....................             resta = 0; 
+00130:  BCF    09.5
+....................             multiplicacion = 0; 
+00132:  BCF    09.6
+....................             division = 0; 
+00134:  BCF    09.7
+....................          } else 
+00136:  BRA    0166
+....................          if(input(PIN_B5)){ 
+00138:  BSF    F93.5
+0013A:  BTFSS  F81.5
+0013C:  BRA    0148
+....................             suma = 0; 
+0013E:  BCF    09.4
+....................             resta = 1; 
+00140:  BSF    09.5
+....................             multiplicacion = 0; 
+00142:  BCF    09.6
+....................             division = 0; 
+00144:  BCF    09.7
+....................          } else 
+00146:  BRA    0166
+....................          if(input(PIN_B6)){ 
+00148:  BSF    F93.6
+0014A:  BTFSS  F81.6
+0014C:  BRA    0158
+....................             suma = 0; 
+0014E:  BCF    09.4
+....................             resta = 0; 
+00150:  BCF    09.5
+....................             multiplicacion = 1; 
+00152:  BSF    09.6
+....................             division = 0;            
+00154:  BCF    09.7
+....................          } else 
+00156:  BRA    0166
+....................          if(input(PIN_B7)){ 
+00158:  BSF    F93.7
+0015A:  BTFSS  F81.7
+0015C:  BRA    0166
+....................              suma = 0; 
+0015E:  BCF    09.4
+....................             resta = 0; 
+00160:  BCF    09.5
+....................             multiplicacion = 0; 
+00162:  BCF    09.6
+....................             division = 1; 
+00164:  BSF    09.7
+....................          } 
+....................       //}   
+....................          if(suma){ 
+00166:  BTFSS  09.4
+00168:  BRA    0186
+....................             resultado = (long)numeroUno + (long)numeroDos; 
+0016A:  CLRF   0C
+0016C:  CLRF   03
+0016E:  MOVF   06,W
+00170:  ADDWF  05,W
+00172:  MOVWF  07
+00174:  MOVF   03,W
+00176:  ADDWFC 0C,W
+00178:  MOVWF  08
+....................             outputResultado13b(resultado); 
+0017A:  MOVFF  08,0C
+0017E:  MOVFF  07,0B
+00182:  RCALL  0004
+....................          } else 
+00184:  BRA    024A
+....................          if(resta){ 
+00186:  BTFSS  09.5
+00188:  BRA    01A6
+....................             resultado = (long)numeroUno - (long)numeroDos; 
+0018A:  CLRF   0C
+0018C:  CLRF   03
+0018E:  MOVF   06,W
+00190:  SUBWF  05,W
+00192:  MOVWF  07
+00194:  MOVF   03,W
+00196:  SUBWFB 0C,W
+00198:  MOVWF  08
+....................             outputResultado13b(resultado); 
+0019A:  MOVFF  08,0C
+0019E:  MOVFF  07,0B
+001A2:  RCALL  0004
+....................          } else 
+001A4:  BRA    024A
+....................          if(multiplicacion){ 
+001A6:  BTFSS  09.6
+001A8:  BRA    01E0
+....................             resultado = (long)numeroUno * (long)numeroDos;      
+001AA:  CLRF   0C
+001AC:  MOVFF  05,0B
+001B0:  CLRF   03
+001B2:  MOVFF  06,0D
+001B6:  MOVFF  03,0E
+001BA:  MOVFF  0C,10
+001BE:  MOVFF  05,0F
+001C2:  MOVFF  03,12
+001C6:  MOVFF  06,11
+001CA:  BRA    0048
+001CC:  MOVFF  02,08
+001D0:  MOVFF  01,07
+....................             outputResultado13b(resultado); 
+001D4:  MOVFF  08,0C
+001D8:  MOVFF  07,0B
+001DC:  RCALL  0004
+....................          } else 
+001DE:  BRA    024A
+....................          if(division){ 
+001E0:  BTFSS  09.7
+001E2:  BRA    024A
+....................              if(numeroDos != 0){ 
+001E4:  MOVF   06,F
+001E6:  BZ    021E
+....................                resultado = (long)numeroUno / (long)numeroDos; 
+001E8:  CLRF   0C
+001EA:  MOVFF  05,0B
+001EE:  CLRF   03
+001F0:  MOVFF  06,0D
+001F4:  MOVFF  03,0E
+001F8:  MOVFF  0C,10
+001FC:  MOVFF  05,0F
+00200:  MOVFF  03,12
+00204:  MOVFF  06,11
+00208:  BRA    0068
+0020A:  MOVFF  02,08
+0020E:  MOVFF  01,07
+....................                outputResultado13b(resultado); 
+00212:  MOVFF  08,0C
+00216:  MOVFF  07,0B
+0021A:  RCALL  0004
+....................                 
+....................             }  
+0021C:  BRA    024A
+....................             else{ 
+....................                banderaError = 1;  //Bandera error Activa 
+0021E:  BSF    09.2
+....................                delay_ms(10); 
+00220:  MOVLW  0A
+00222:  MOVWF  0B
+00224:  BRA    00AC
+....................                contador ++; 
+00226:  INCF   0A,F
+....................                if(contador == 50){ 
+00228:  MOVF   0A,W
+0022A:  SUBLW  32
+0022C:  BNZ   024A
+....................                     /* cambioEstadoPuertoA(); 
+....................                      cambioEstadoPuertoB(); 
+....................                      cambioEstadoPuertoE(); 
+....................                      */ 
+....................                      if(banderaContador == 1){ 
+0022E:  BTFSS  09.3
+00230:  BRA    0240
+....................                         outputResultado13b(8191); 
+00232:  MOVLW  1F
+00234:  MOVWF  0C
+00236:  SETF   0B
+00238:  RCALL  0004
+....................                         contador =0; 
+0023A:  CLRF   0A
+....................                         banderaContador = 0; 
+0023C:  BCF    09.3
+....................                      } 
+0023E:  BRA    024A
+....................                      else{ 
+....................                         outputResultado13b(0); 
+00240:  CLRF   0C
+00242:  CLRF   0B
+00244:  RCALL  0004
+....................                         banderaContador = 1; 
+00246:  BSF    09.3
+....................                         contador = 0; 
+00248:  CLRF   0A
+....................                      }        
+....................                 }        
+....................             } 
+....................          } 
+....................          if(banderaError == 0) 
+0024A:  BTFSC  09.2
+0024C:  BRA    0258
+....................             outputResultado13b(resultado); 
+0024E:  MOVFF  08,0C
+00252:  MOVFF  07,0B
+00256:  RCALL  0004
+00258:  BRA    011A
+....................          
+....................              
+....................          
+....................    } 
+....................          //outputResultado13b(8191); 
 .................... } 
+....................         
+0025A:  SLEEP 
 ....................  
-00072:  SLEEP 
-.................... void puertoDef8Bits(unsigned int8 result){ 
-....................     
-....................    // A0 A1 A2 A3 A5 E0 E1 E2 //// B2 B3 B1 B4 B0 
-....................    // Encendido de cada puerto suponiendo que A0 es el mas significativo 
-....................    if(bit_test(result,0)){ 
+....................  
+.................... void outputResultado13b(int16 res){ 
+....................    OUTPUT_A(res); 
 *
-00004:  BTFSS  06.0
-00006:  BRA    000C
-....................       output_high(pin_e2); 
-00008:  BCF    F96.2
-0000A:  BSF    F8D.2
-....................    } 
-....................    if(bit_test(result,1)){ 
-0000C:  BTFSS  06.1
-0000E:  BRA    0014
-....................       output_high(pin_e1); 
-00010:  BCF    F96.1
-00012:  BSF    F8D.1
-....................    } 
-....................    if(bit_test(result,2)){ 
-00014:  BTFSS  06.2
-00016:  BRA    001C
-....................       output_high(pin_e0); 
-00018:  BCF    F96.0
-0001A:  BSF    F8D.0
-....................    } 
-....................    if(bit_test(result,3)){ 
-0001C:  BTFSS  06.3
-0001E:  BRA    0024
-....................       output_high(pin_a5); 
-00020:  BCF    F92.5
-00022:  BSF    F89.5
-....................    } 
-....................    if(bit_test(result,4)){ 
-00024:  BTFSS  06.4
-00026:  BRA    002C
-....................       output_high(pin_a3); 
-00028:  BCF    F92.3
-0002A:  BSF    F89.3
-....................    } 
-....................    if(bit_test(result,5)){ 
-0002C:  BTFSS  06.5
-0002E:  BRA    0034
-....................       output_high(pin_a2); 
-00030:  BCF    F92.2
-00032:  BSF    F89.2
-....................    } 
-....................    if(bit_test(result,6)){ 
-00034:  BTFSS  06.6
-00036:  BRA    003C
-....................       output_high(pin_a1); 
-00038:  BCF    F92.1
-0003A:  BSF    F89.1
-....................    } 
-....................    if(bit_test(result,7)){ 
-0003C:  BTFSS  06.7
-0003E:  BRA    0044
-....................       output_high(pin_a0); 
-00040:  BCF    F92.0
-00042:  BSF    F89.0
-....................    } 
-00044:  GOTO   0070 (RETURN)
-....................    
-....................       // A0 A1 A2 A3 A5 E0 E1 E2 B2 B3 B1 B4 B0 
-....................        
-....................        
-....................     
+00004:  CLRF   F92
+00006:  MOVFF  0B,F89
+....................    OUTPUT_B(res>>6); 
+0000A:  RRCF   0C,W
+0000C:  MOVWF  0E
+0000E:  RRCF   0B,W
+00010:  MOVWF  0D
+00012:  RRCF   0E,F
+00014:  RRCF   0D,F
+00016:  RRCF   0E,F
+00018:  RRCF   0D,F
+0001A:  RRCF   0E,F
+0001C:  RRCF   0D,F
+0001E:  RRCF   0E,F
+00020:  RRCF   0D,F
+00022:  RRCF   0E,F
+00024:  RRCF   0D,F
+00026:  MOVLW  03
+00028:  ANDWF  0E,F
+0002A:  CLRF   F93
+0002C:  MOVFF  0D,F8A
+....................    OUTPUT_E(res>>10); 
+00030:  RRCF   0C,W
+00032:  MOVWF  0D
+00034:  RRCF   0D,F
+00036:  MOVLW  3F
+00038:  ANDWF  0D,F
+0003A:  BCF    F96.0
+0003C:  BCF    F96.1
+0003E:  BCF    F96.2
+00040:  BCF    F96.3
+00042:  MOVFF  0D,F8D
+00046:  RETURN 0
+.................... } 
+.................... void cambioEstadoPuertoA(){ 
+....................    output_toggle(PIN_A0); 
+....................    output_toggle(PIN_A1); 
+....................    output_toggle(PIN_A2); 
+....................    output_toggle(PIN_A3); 
+....................    output_toggle(PIN_A4); 
+....................    output_toggle(PIN_A5); 
+.................... } 
+.................... void cambioEstadoPuertoB(){ 
+....................    output_toggle(PIN_B0); 
+....................    output_toggle(PIN_B1); 
+....................    output_toggle(PIN_B2); 
+....................    output_toggle(PIN_B3); 
+.................... } 
+.................... void cambioEstadoPuertoE(){ 
+....................    output_toggle(PIN_E0); 
+....................    output_toggle(PIN_E1); 
+....................    output_toggle(PIN_E2); 
 .................... } 
 
 Configuration Fuses:
-   Word  1: 0800   INTRC_IO NOFCMEN NOIESO
+   Word  1: 0100   XT NOFCMEN NOIESO
    Word  2: 1E18   PUT NOBROWNOUT BORV21 NOWDT WDT32768
    Word  3: 0500   CCP2C1 NOPBADEN LPT1OSC NOMCLR
    Word  4: 0081   STVREN NOLVP NOXINST NODEBUG

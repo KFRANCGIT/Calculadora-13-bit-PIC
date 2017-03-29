@@ -69,13 +69,12 @@ void main(void){
       int16 resultado = 0;
       int banderasOperaciones = 0;
     
-      #bit banderaError = banderasOperaciones.2;
+      
       #bit banderaContador = banderasOperaciones.3;
       #bit suma = banderasOperaciones.4;
       #bit resta = banderasOperaciones.5;
       #bit multiplicacion = banderasOperaciones.6;
       #bit division = banderasOperaciones.7;
-      
       int contador = 50;
       /*int1 opSuma = 0;
       int1 opResta = 0;
@@ -98,8 +97,7 @@ void main(void){
 
       
       
-      while(true){
-         banderaError = 0;  //Inicializacion bandera error
+      while(true){   
          numeroUno = input_c();
          numeroDos = input_d();
          
@@ -150,10 +148,8 @@ void main(void){
              if(numeroDos != 0){
                resultado = (long)numeroUno / (long)numeroDos;
                outputResultado13b(resultado);
-               
             } 
             else{
-               banderaError = 1;  //Bandera error Activa
                delay_ms(10);
                contador ++;
                if(contador == 50){
@@ -174,10 +170,7 @@ void main(void){
                 }       
             }
          }
-         if(banderaError == 0)
-            outputResultado13b(resultado);
-        
-            
+         
         
    }
          //outputResultado13b(8191);

@@ -63,20 +63,18 @@ void main(void){
       
       setup_oscillator(OSC_normal);
       setup_adc(NO_ANALOGS);
-      
-      unsigned int8 numeroUno = 0;    // Se puede reemplazar esto al leerlo directamente y operarlo    
+      unsigned int8 numeroUno = 0;      
       unsigned int8 numeroDos = 0;  
-      int16 resultado = 0;
+      int16 resultado = 10;
       int banderasOperaciones = 0;
-    
-      #bit banderaError = banderasOperaciones.2;
+      port_x_pullups(FALSE);
+      
       #bit banderaContador = banderasOperaciones.3;
       #bit suma = banderasOperaciones.4;
       #bit resta = banderasOperaciones.5;
       #bit multiplicacion = banderasOperaciones.6;
       #bit division = banderasOperaciones.7;
-      
-      int contador = 50;
+      int contador = 0;
       /*int1 opSuma = 0;
       int1 opResta = 0;
       int1 opMultiplicacion = 0;
@@ -88,8 +86,6 @@ void main(void){
       SET_TRIS_C(0xFF);
       SET_TRIS_D(0xFF);
       
-      
-      
       //port_a_pullups(TRUE);
       //EXT_INT_EDGE(H_TO_L);
       //EXT_INT_EDGE(L_TO_H);
@@ -98,12 +94,11 @@ void main(void){
 
       
       
-      while(true){
-         banderaError = 0;  //Inicializacion bandera error
+      while(true){   
          numeroUno = input_c();
          numeroDos = input_d();
          
-         
+         outputResultado13b(resultado);
          /*opSuma = input(PIN_B4);
          opResta = input(PIN_B5);
          opMultiplicacion = input(PIN_B6);
@@ -135,50 +130,39 @@ void main(void){
          }
       //}  
          if(suma){
-            resultado = (long)numeroUno + (long)numeroDos;
-            outputResultado13b(resultado);
+            resultado = numeroUno + numeroDos;
          } else
          if(resta){
-            resultado = (long)numeroUno - (long)numeroDos;
-            outputResultado13b(resultado);
+            resultado = numeroUno - numeroDos;
          } else
          if(multiplicacion){
-            resultado = (long)numeroUno * (long)numeroDos;     
-            outputResultado13b(resultado);
+            resultado = numeroUno * numeroDos;        
          } else
          if(division){
              if(numeroDos != 0){
-               resultado = (long)numeroUno / (long)numeroDos;
-               outputResultado13b(resultado);
-               
+               resultado = numeroUno / numeroDos;
             } 
             else{
-               banderaError = 1;  //Bandera error Activa
+               if(banderaContador == 0){
+                  /*output_a(31);
+                  output_b(15);
+                  output_e(7);*/
+                  outputResultado13b(8191);
+                  banderaContador = 1;
+               }
+               
+               else{
                delay_ms(10);
                contador ++;
-               if(contador == 50){
-                    /* cambioEstadoPuertoA();
+                  if(contador == 50){
+                     cambioEstadoPuertoA();
                      cambioEstadoPuertoB();
                      cambioEstadoPuertoE();
-                     */
-                     if(banderaContador == 1){
-                        outputResultado13b(8191);
-                        contador =0;
-                        banderaContador = 0;
-                     }
-                     else{
-                        outputResultado13b(0);
-                        banderaContador = 1;
-                        contador = 0;
-                     }       
-                }       
+                     contador = 0;
+                  }
+               }
             }
          }
-         if(banderaError == 0)
-            outputResultado13b(resultado);
-        
-            
-        
    }
          //outputResultado13b(8191);
 }

@@ -13,7 +13,9 @@ Type=4
 1=main.c
 [Opened Files]
 1=main.c
-2=
+2=C:\Program Files (x86)\PICC\Devices\18f4620.h
+3=main.lst
+4=
 [Units]
 Count=1
 1=main (main)
