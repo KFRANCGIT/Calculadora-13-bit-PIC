@@ -1,10 +1,7 @@
 ÀÄmain
-   ÀÄmain  0/390  Ram=4
+   ÀÄmain  0/360  Ram=4
       ÃÄ@cinit1  (Inline)  Ram=0
-      ÃÄoutputResultado13b  0/68  Ram=4
-      ÃÄoutputResultado13b  0/68  Ram=4
       ÃÄ@MUL1616  0/32  Ram=5
-      ÃÄoutputResultado13b  0/68  Ram=4
       ÃÄ@DIV1616  0/68  Ram=5
       ÃÄoutputResultado13b  0/68  Ram=4
       ÃÄ@delay_ms1  0/42  Ram=1

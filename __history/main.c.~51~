@@ -4,18 +4,14 @@
 #fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG
 
 void outputResultado13b(int16 res);   //Funcion para enviar resultado a los puertos A,B,E de los pines correspondientes
+void cambioEstadoPuertoA();    
+void cambioEstadoPuertoB();
+void cambioEstadoPuertoE();
 
 void main(void){
       
       setup_oscillator(OSC_normal);
       setup_adc(NO_ANALOGS);
-      
-       //Activacion de entradas y salidas correspondientes en los puertos
-      SET_TRIS_A(0x00);
-      SET_TRIS_E(0x08);
-      SET_TRIS_B(0xF0); 
-      SET_TRIS_C(0xFF);
-      SET_TRIS_D(0xFF);
       
       unsigned int8 numeroUno = 0;               // Se puede reemplazar esto al leerlo directamente y operarlo    
       unsigned int8 numeroDos = 0;     
@@ -32,7 +28,14 @@ void main(void){
       
       //Inicalización de variables
       int contador = 50;
-      
+ 
+     
+      SET_TRIS_A(0x00);
+      SET_TRIS_E(0x08);
+      SET_TRIS_B(0xF0); 
+      SET_TRIS_C(0xFF);
+      SET_TRIS_D(0xFF);
+        
       while(true){
          //Inicializacion bandera error
          banderaError = 0;

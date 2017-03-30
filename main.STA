@@ -1,9 +1,9 @@
 
-ROM used:   604/65536 (1%)
-            604/65536 (1%) including unused fragments
+ROM used:   574/65536 (1%)
+            574/65536 (1%) including unused fragments
 
             0.6 Average locations per line
-            6.0 Average locations per statement
+            6.8 Average locations per statement
 
 RAM used:   8/3968 (0%) at main() level
             19/3968 (0%) worst case
@@ -13,15 +13,15 @@ Stack size: 31
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  212   100 100  main.c
+  123    84 100  main.c
   834     0   0  C:\Program Files (x86)\PICC\Devices\18f4620.h
 ----- -----
- 1046   100 Total
+  957    84 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
-0     42   3    1             @delay_ms1
-0    390  32    4  2478  7.4  main
+0     42   4    1             @delay_ms1
+0    360  31    4  2379  7.5  main
 0     32   3    5             @MUL1616
 0     68   6    5             @DIV1616
 0     68   6    4    80  1.7  outputResultado13b
@@ -29,20 +29,20 @@ Page ROM  %  RAM   Vol Diff  Functions:
 
 Program metrics:
     Functions               2
-    Statements              100
-    Comments                221
-    Volume (V)              2685
+    Statements              84
+    Comments                163
+    Volume (V)              2586
     Difficulty (D)          9.2
-    Effort to implement (E) 24609
-    Time to implement (T)   23 minutes
+    Effort to implement (E) 23863
+    Time to implement (T)   22 minutes
     Est Delivered Bugs (B)  0
     Cyclomatic Complexity   12
-    Maintainability (MI)    42
+    Maintainability (MI)    121
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00002     4  0  
-00004-0FFFE   600  64932  
+00004-0FFFE   570  64962  
 
 
 
