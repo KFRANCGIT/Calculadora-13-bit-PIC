@@ -80,8 +80,10 @@ void main(void){
             resultado = (long)numeroUno * (long)numeroDos;     
          } 
          else if(division){
-            if(numeroDos != 0){
+             if(numeroDos != 0){
                resultado = (long)numeroUno / (long)numeroDos;
+               outputResultado13b(resultado);
+               
             } 
             else{
                banderaError = 1;  //Bandera error Activa
@@ -91,7 +93,7 @@ void main(void){
                if(contador == 50){
                   if(banderaContador == 1){
                      outputResultado13b(8191);
-                     banderaContador = 0;
+                      banderaContador = 0;
                      contador = 0;
                     
                   }

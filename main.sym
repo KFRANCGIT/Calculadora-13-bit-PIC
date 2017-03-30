@@ -49,8 +49,8 @@ FF6-FF8 @READ_PROGRAM_MEMORY.P2
 ROM Allocation:
 000004  @MUL1616
 000024  @DIV1616
-000068  outputResultado13b
-0000AC  @delay_ms1
+000068  @delay_ms1
+000092  outputResultado13b
 0000D6  main
 0000D6  @cinit1
 0000E6  @cinit2
@@ -59,10 +59,10 @@ Project Directory:
     D:\OneDrive\INGENIERIA TELEMATICA\4° Semestre\Sistemas Embebidos\PRACTICAS PROGRAMACION\PRACTICA 2\Calculadora-13-bit-PIC\
 
 Project Files:
-    main.c                                                  [29-mar.-17 22:22  CRC=581AE1D5]
+    main.c                                                  [29-mar.-17 22:41  CRC=CC2D2F4C]
     C:\Program Files (x86)\PICC\Devices\18f4620.h           [10-sep.-13 16:34  CRC=044A57BA]
 
-Source signature=60AF9149
+Source signature=D4C1DEC0
 
 Units:
     main (main)

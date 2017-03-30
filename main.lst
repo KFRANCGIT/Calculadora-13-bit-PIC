@@ -1,9 +1,9 @@
-CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 22:22
+CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 22:41
 
                Filename:   D:\OneDrive\INGENIERIA TELEMATICA\4° Semestre\Sistemas Embebidos\PRACTICAS PROGRAMACION\PRACTICA 2\Calculadora-13-bit-PIC\main.lst
 
-               ROM used:   574 bytes (1%)
-                           Largest free fragment is 64962
+               ROM used:   564 bytes (1%)
+                           Largest free fragment is 64972
                RAM used:   8 (0%) at main() level
                            19 (0%) worst case
                Stack used: 1 locations
@@ -73,33 +73,33 @@ CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 22:22
 .................... #list 
 ....................  
 .................... #use delay(clock=16M) 
-*
-000AC:  CLRF   FEA
-000AE:  MOVLW  0B
-000B0:  MOVWF  FE9
-000B2:  MOVF   FEF,W
-000B4:  BZ    00D2
-000B6:  MOVLW  05
-000B8:  MOVWF  01
-000BA:  CLRF   00
-000BC:  DECFSZ 00,F
-000BE:  BRA    00BC
-000C0:  DECFSZ 01,F
-000C2:  BRA    00BA
-000C4:  MOVLW  2E
-000C6:  MOVWF  00
-000C8:  DECFSZ 00,F
-000CA:  BRA    00C8
-000CC:  BRA    00CE
-000CE:  DECFSZ FEF,F
-000D0:  BRA    00B6
-000D2:  GOTO   0208 (RETURN)
+00068:  CLRF   FEA
+0006A:  MOVLW  0B
+0006C:  MOVWF  FE9
+0006E:  MOVF   FEF,W
+00070:  BZ    008E
+00072:  MOVLW  05
+00074:  MOVWF  01
+00076:  CLRF   00
+00078:  DECFSZ 00,F
+0007A:  BRA    0078
+0007C:  DECFSZ 01,F
+0007E:  BRA    0076
+00080:  MOVLW  2E
+00082:  MOVWF  00
+00084:  DECFSZ 00,F
+00086:  BRA    0084
+00088:  BRA    008A
+0008A:  DECFSZ FEF,F
+0008C:  BRA    0072
+0008E:  GOTO   01FE (RETURN)
 .................... #fuses XT, NOFCMEN, NOIESO, PUT, NOBROWNOUT, NOWDT 
 .................... #fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG 
 ....................  
 .................... void outputResultado13b(int16 res);   //Funcion para enviar resultado a los puertos A,B,E de los pines correspondientes 
 ....................  
 .................... void main(void){ 
+*
 000D6:  CLRF   FF8
 000D8:  BCF    FD0.7
 000DA:  MOVF   FC1,W
@@ -138,7 +138,7 @@ CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 22:22
 ....................       SET_TRIS_D(0xFF); 
 0010A:  MOVWF  F95
 ....................        
-....................       unsigned int8 numeroUno = 0;               // Se puede reemplazar esto al leerlo directamente y operarlo     
+....................       unsigned int8 numeroUno = 0;               //Operandos     
 ....................       unsigned int8 numeroDos = 0;      
 ....................       int16 resultado = 0;                       //Variable resultado para almacenar resultados de operacion 
 ....................       unsigned int8 banderasOperaciones = 0;     //Variable usada para uso de banderas y control de operaciones 
@@ -247,7 +247,7 @@ CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 22:22
 00176:  ADDWFC 0C,W
 00178:  MOVWF  08
 ....................          }  
-0017A:  BRA    022C
+0017A:  BRA    0222
 ....................          else if(resta){ 
 0017C:  BTFSS  09.5
 0017E:  BRA    0192
@@ -261,7 +261,7 @@ CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 22:22
 0018C:  SUBWFB 0C,W
 0018E:  MOVWF  08
 ....................          }  
-00190:  BRA    022C
+00190:  BRA    0222
 ....................          else if(multiplicacion){ 
 00192:  BTFSS  09.6
 00194:  BRA    01C2
@@ -279,13 +279,13 @@ CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 22:22
 001B8:  MOVFF  02,08
 001BC:  MOVFF  01,07
 ....................          }  
-001C0:  BRA    022C
+001C0:  BRA    0222
 ....................          else if(division){ 
 001C2:  BTFSS  09.7
-001C4:  BRA    022C
-....................              if(numeroDos != 0){ 
+001C4:  BRA    0222
+....................             if(numeroDos != 0){ 
 001C6:  MOVF   06,F
-001C8:  BZ    0200
+001C8:  BZ    01F6
 ....................                resultado = (long)numeroUno / (long)numeroDos; 
 001CA:  CLRF   0C
 001CC:  MOVFF  05,0B
@@ -299,51 +299,46 @@ CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 22:22
 001EA:  BRA    0024
 001EC:  MOVFF  02,08
 001F0:  MOVFF  01,07
-....................                outputResultado13b(resultado); 
-001F4:  MOVFF  08,0C
-001F8:  MOVFF  07,0B
-001FC:  RCALL  0068
-....................                 
 ....................             }  
-001FE:  BRA    022C
+001F4:  BRA    0222
 ....................             else{ 
 ....................                banderaError = 1;  //Bandera error Activa 
-00200:  BSF    09.2
+001F6:  BSF    09.2
 ....................                 
 ....................                delay_ms(10); 
-00202:  MOVLW  0A
-00204:  MOVWF  0B
-00206:  BRA    00AC
+001F8:  MOVLW  0A
+001FA:  MOVWF  0B
+001FC:  BRA    0068
 ....................                contador ++; 
-00208:  INCF   0A,F
+001FE:  INCF   0A,F
 ....................                if(contador == 50){ 
-0020A:  MOVF   0A,W
-0020C:  SUBLW  32
-0020E:  BNZ   022C
+00200:  MOVF   0A,W
+00202:  SUBLW  32
+00204:  BNZ   0222
 ....................                   if(banderaContador == 1){ 
-00210:  BTFSS  09.3
-00212:  BRA    0222
+00206:  BTFSS  09.3
+00208:  BRA    0218
 ....................                      outputResultado13b(8191); 
-00214:  MOVLW  1F
-00216:  MOVWF  0C
-00218:  SETF   0B
-0021A:  RCALL  0068
-....................                       banderaContador = 0; 
-0021C:  BCF    09.3
+0020A:  MOVLW  1F
+0020C:  MOVWF  0C
+0020E:  SETF   0B
+00210:  RCALL  0092
+....................                      banderaContador = 0; 
+00212:  BCF    09.3
 ....................                      contador = 0; 
-0021E:  CLRF   0A
+00214:  CLRF   0A
 ....................                      
 ....................                   } 
-00220:  BRA    022C
+00216:  BRA    0222
 ....................                   else{ 
 ....................                      outputResultado13b(0); 
-00222:  CLRF   0C
-00224:  CLRF   0B
-00226:  RCALL  0068
+00218:  CLRF   0C
+0021A:  CLRF   0B
+0021C:  RCALL  0092
 ....................                      banderaContador = 1; 
-00228:  BSF    09.3
+0021E:  BSF    09.3
 ....................                      contador = 0; 
-0022A:  CLRF   0A
+00220:  CLRF   0A
 ....................                   }        
 ....................               }        
 ....................             } 
@@ -351,55 +346,55 @@ CCS PCH C Compiler, Version 5.012, 41559               29-mar.-17 22:22
 ....................           
 ....................          //Muestra de variable resultado solo si no se enecuentra activo el error de division. 
 ....................          if(banderaError == 0) 
-0022C:  BTFSC  09.2
-0022E:  BRA    023A
+00222:  BTFSC  09.2
+00224:  BRA    0230
 ....................             outputResultado13b(resultado); 
-00230:  MOVFF  08,0C
-00234:  MOVFF  07,0B
-00238:  RCALL  0068
-0023A:  BRA    011A
+00226:  MOVFF  08,0C
+0022A:  MOVFF  07,0B
+0022E:  RCALL  0092
+00230:  BRA    011A
 ....................    } 
 ....................  
 .................... } 
 ....................         
-0023C:  SLEEP 
+00232:  SLEEP 
 ....................  
 .................... void outputResultado13b(int16 res){ 
 ....................    OUTPUT_A(res); 
 *
-00068:  CLRF   F92
-0006A:  MOVFF  0B,F89
+00092:  CLRF   F92
+00094:  MOVFF  0B,F89
 ....................    OUTPUT_B(res>>6); 
-0006E:  RRCF   0C,W
-00070:  MOVWF  0E
-00072:  RRCF   0B,W
-00074:  MOVWF  0D
-00076:  RRCF   0E,F
-00078:  RRCF   0D,F
-0007A:  RRCF   0E,F
-0007C:  RRCF   0D,F
-0007E:  RRCF   0E,F
-00080:  RRCF   0D,F
-00082:  RRCF   0E,F
-00084:  RRCF   0D,F
-00086:  RRCF   0E,F
-00088:  RRCF   0D,F
-0008A:  MOVLW  03
-0008C:  ANDWF  0E,F
-0008E:  CLRF   F93
-00090:  MOVFF  0D,F8A
+00098:  RRCF   0C,W
+0009A:  MOVWF  0E
+0009C:  RRCF   0B,W
+0009E:  MOVWF  0D
+000A0:  RRCF   0E,F
+000A2:  RRCF   0D,F
+000A4:  RRCF   0E,F
+000A6:  RRCF   0D,F
+000A8:  RRCF   0E,F
+000AA:  RRCF   0D,F
+000AC:  RRCF   0E,F
+000AE:  RRCF   0D,F
+000B0:  RRCF   0E,F
+000B2:  RRCF   0D,F
+000B4:  MOVLW  03
+000B6:  ANDWF  0E,F
+000B8:  CLRF   F93
+000BA:  MOVFF  0D,F8A
 ....................    OUTPUT_E(res>>10); 
-00094:  RRCF   0C,W
-00096:  MOVWF  0D
-00098:  RRCF   0D,F
-0009A:  MOVLW  3F
-0009C:  ANDWF  0D,F
-0009E:  BCF    F96.0
-000A0:  BCF    F96.1
-000A2:  BCF    F96.2
-000A4:  BCF    F96.3
-000A6:  MOVFF  0D,F8D
-000AA:  RETURN 0
+000BE:  RRCF   0C,W
+000C0:  MOVWF  0D
+000C2:  RRCF   0D,F
+000C4:  MOVLW  3F
+000C6:  ANDWF  0D,F
+000C8:  BCF    F96.0
+000CA:  BCF    F96.1
+000CC:  BCF    F96.2
+000CE:  BCF    F96.3
+000D0:  MOVFF  0D,F8D
+000D4:  RETURN 0
 .................... } 
 ....................  
 
