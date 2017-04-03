@@ -2,10 +2,10 @@
 #use delay(clock=16M)
 #fuses INTRC_IO, NOFCMEN, NOIESO, PUT, NOBROWNOUT, NOWDT
 #fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG
-#use fast_io(A)
-#use fast_io(B)
-#use fast_io(C)
-#use fast_io(D)
+#use fast_io(A);
+#use fast_io(B);
+#use fast_io(C);
+#use fast_io(D);
 void outputResultado13b(int16 res);   //Funcion para enviar resultado a los puertos A,B,E de los pines correspondientes
 
 void main(void){
@@ -54,7 +54,6 @@ void main(void){
               
          //Evaluación de boton presionado y activado de bandera correspondiente 
          //a operacion a realizar
-         
          
          if(input(PIN_B4)){
             suma = 1;
