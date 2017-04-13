@@ -1,6 +1,6 @@
 #include <18f4620.h>
 #use delay(clock=16M)
-#fuses XT, NOFCMEN, NOIESO, PUT, NOBROWNOUT, NOWDT
+#fuses INTRC_IO, NOFCMEN, NOIESO, PUT, NOBROWNOUT, NOWDT
 #fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG
 #use fast_io(A)
 #use fast_io(B)
@@ -21,11 +21,16 @@ void main(void){
       SET_TRIS_D(0xFF);
    
      
-      unsigned int8 operandoUno = 0;                 
-      unsigned int8 operandoDos = 0;     
+      unsigned int8 numeroUno = 0;               //Operandos    
+      unsigned int8 numeroDos = 0;     
       int16 resultado = 0;                       //Variable resultado para almacenar resultados de operacion
       unsigned int8 banderasOperaciones = 0;     //Variable usada para uso de banderas y control de operaciones
-
+    /*  int1 suma = 0;
+      int1 resta = 0;
+      int1 multiplicacion = 0;
+      int1 division = 0;
+      int1 banderaError;
+      */
       
       //Declaracion de bits a partir de BanderasOperaciones
       #bit banderaError = banderasOperaciones.2;
@@ -83,21 +88,21 @@ void main(void){
          
          //Realización de calculo a partir de la operacion activa
          if(suma){
-            resultado = (long)operandoUno + (long)operandoDos;
+            resultado = (long)numeroUno + (long)numeroDos;
            
          } 
          else if(resta){
-            resultado = (long)operandoUno - (long)operandoDos;
+            resultado = (long)numeroUno - (long)numeroDos;
             
          } 
          else if(multiplicacion){
-            resultado = (long)operandoUno * (long)operandoDos; 
+            resultado = (long)numeroUno * (long)numeroDos; 
             
          } 
          else if(division){
             
             if(numeroDos != 0){
-               resultado = (long)operandoUno / (long)operandoDos;
+               resultado = (long)numeroUno / (long)numeroDos;
             } 
             else{
                banderaError = 1;  //Bandera error Activa
